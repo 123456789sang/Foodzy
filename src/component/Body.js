@@ -1,67 +1,69 @@
-import RestaurantCard from "./RestaurantCard.js";
-
+import RestaurantCard from "./RestaurantCard";
+import { useEffect, useState } from "react";
+import { resList } from "../utils/mockData";
 const Body = () => { 
+  const [listOfRestaurants, setlistOfRestaurants] = useState([]);
 
-  let listOfRestaurants =[
-    {
-        info: {
-            id: "12575",
-            name: "Pizza Hut",
-            cloudinaryImageId: "RX_THUMBNAIL/IMAGES/VENDOR/2024/7/16/5b9c53df-e0cb-48fc-ac31-f02735592edc_10575.jpg",
-            locality: "Richmond Town",
-            areaName: "Central Bangalore",
-            costForTwo: "₹600 for two",
-            cuisines: [
-            "Pizzas"
-            ],
-            avgRating: 4.3,
-            deliveryTime: 38 ,   
-       },
-    },
+  useEffect(() => {
+    fetchData();
+  },[]);
 
-    {
-        info: {
-        id: "10676",
-        name: "Domino",
-        cloudinaryImageId: "RX_THUMBNAIL/IMAGES/VENDOR/2024/7/16/5b9c53df-e0cb-48fc-ac31-f02735592edc_10575.jpg",
-        locality: "Richmond Town",
-        areaName: "Central Bangalore",
-        costForTwo: "₹600 for two",
-        cuisines: [
-        "Pizzas"
-        ],
-        avgRating: 4.6,
-        deliveryTime: 38
-        }
-    },
-   ];
+  const fetchData = async () => {
+   
+      const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9715987&lng=77.5945627&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING");
+      const json = await data.json();
+         
+     console.log("API Response:", json);
+      const restaurants =
+      json?.data?.cards
+  ?.flatMap((card) => card?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+  ?.map((res) => res?.info)
+  .filter(Boolean);
 
+   // console.log("Extracted Restaurants:", restaurants);
+    //  Remove duplicates strictly using a Map
+  const uniqueRestaurants = Array.from(
+    new Map(restaurants.map((res) => [res?.id, res])).values()
+  );
 
+ // console.log("Filtered Unique Restaurants:", uniqueRestaurants.map((r) => r.id));
 
-    return (
-        <div className="body-container">
-            <div className="filter">
-               <button 
-                  className="filter-btn"
-                  onClick={() => {
-                     // filter logic here
+  setlistOfRestaurants(uniqueRestaurants);
+  };
 
-                 listOfRestaurants =listOfRestaurants.filter( 
-                   (res) => res.info.avgRating > 4
-                  );
-                  console.log(listOfRestaurants);
-                }}
-                >
-                Top Rated Restaurant 
-                </button>
-            </div>
-            <div className="restaurant-container">
-              {listOfRestaurants.map((restaurant) => (
-                <RestaurantCard key={restaurant.info.id} resData = {restaurant} />
-                ))}
-            </div>
-        </div>
-    );
+  //conditional rendering 
+  if(listOfRestaurants==0){
+    return ;
+  }
+  return   (restaurant.length==0) ?< shimmer />:(
+    <div className="body">
+      <div className="filter">
+        <button
+          className="filter-btn"
+          onClick={() => {
+            const filteredList = listOfRestaurants.filter(
+              (res) => res.avgRating > 4
+            );
+            setlistOfRestaurants(filteredList);
+          }}
+        >
+          Top Rated Restaurants
+        </button>
+      </div>
+      <div className="restaurant-container">
+        {
+          listOfRestaurants.map((restaurant, index) => (
+            <RestaurantCard 
+              key={restaurant?.id || index} // Fallback to index if id is missing
+              resData={{ info: restaurant }} 
+            />
+          ))}
+ 
+      </div>
+    </div>
+  );
 };
 
-export default Body;
+export default Body;  
+
+  
