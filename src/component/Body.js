@@ -84,7 +84,7 @@ const Body = () => {
     const [searchTxt, setSearchTxt] = useState("");
 
     //console.log(listOfRestaurants); 
-    console.log("body -rerendered ");
+ //   console.log("body -rerendered ");
 
 
     useEffect(() => {
@@ -96,7 +96,7 @@ const Body = () => {
             "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9715987&lng=77.5945627&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
         );
         const json = await response.json();
-        console.log(json);
+       // console.log(json);
   
         const restaurants = json?.data?.cards
             ?.flatMap((card) => card?.card?.card?.gridElements?.infoWithStyle?.restaurants)
@@ -126,13 +126,13 @@ const Body = () => {
                     //searchTxt
                         onClick={() => {
 
-                            console.log(searchTxt);
+                        //    console.log(searchTxt);
 
                             const filteredRestaurant = originalList.filter((res) =>
                                 res?.name?.toLowerCase().includes(searchTxt.toLowerCase())
                             );
 
-                            console.log(filteredRestaurant);
+                         //   console.log(filteredRestaurant);
                             setlistOfRestaurants(filteredRestaurant); // ✅ Fixed: Updating `listOfRestaurants` instead of `originalList`
                         }}
                     >
@@ -145,7 +145,7 @@ const Body = () => {
                     onClick={() => {
                         const filteredList = originalList.filter((res) => res?.avgRating > 4.5);
 
-                       console.log(filteredList);
+//console.log(filteredList);
                         setlistOfRestaurants(filteredList);
                     }}
                 >
