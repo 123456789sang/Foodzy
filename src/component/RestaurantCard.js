@@ -2,17 +2,17 @@ import { CDN_URL } from "../utils/constant.js";
 
 const RestaurantCard = (props) => {
     const { resData } = props;  
-  //  console.log("RestaurantCard Props:", props);
+  
 
-    // Ensure resData and resData.info exist
+    // Ensure resData.info exists; provide defaults to prevent undefined errors
     const { 
-        cloudinaryImageId , 
-        name , 
-        cuisines, 
-        avgRating , 
+        cloudinaryImageId,  
+        name, 
+        cuisines,
+        avgRating, 
         costForTwo,
-        sla = {} 
-    } = resData?.info || {};  //  Fix: Default to empty object {}
+        sla 
+    } = resData?.info ;  
 
     return (
         <div className="res-card" style={{ background: "#f0f0f0" }}>
@@ -22,12 +22,13 @@ const RestaurantCard = (props) => {
                 src={CDN_URL + cloudinaryImageId} 
             />
             <h3>{name}</h3>
-            <h4>{ cuisines.join(", ") }</h4>
+            <h4>{cuisines.join(", ")}</h4>
             <h4>{avgRating} stars</h4>
             <h4>{costForTwo}</h4>
-            <h4>{sla?.deliveryTime } minutes</h4>
+            <h4>{sla?.deliveryTime }minutes</h4>
         </div>
     );
 };
+
 
 export default RestaurantCard;
