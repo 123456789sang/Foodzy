@@ -96,7 +96,7 @@ const Body = () => {
             "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9715987&lng=77.5945627&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
         );
         const json = await response.json();
-       // console.log(json);
+       console.log(json);
   
         const restaurants = json?.data?.cards
             ?.flatMap((card) => card?.card?.card?.gridElements?.infoWithStyle?.restaurants)
@@ -145,7 +145,7 @@ const Body = () => {
                     onClick={() => {
                         const filteredList = originalList.filter((res) => res?.avgRating > 4.5);
 
-//console.log(filteredList);
+                       //console.log(filteredList);
                         setlistOfRestaurants(filteredList);
                     }}
                 >
